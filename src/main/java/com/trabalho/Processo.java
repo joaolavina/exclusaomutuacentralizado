@@ -1,11 +1,10 @@
 package com.trabalho;
 
 import java.util.Random;
-import java.util.UUID;
-
 public class Processo {
 
     private String id;
+    private int tempoComsumo;
 
     public Processo(String id) {
         this.id = id;
