@@ -1,23 +1,23 @@
 package com.trabalho;
 
 import java.util.Queue;
+import java.util.UUID;
 
 public class Coordenador extends Thread {
 
     private Queue<Processo> fila;
-    private int id;
-    private boolean processoLivre;
+    private String id;
     private boolean vivo;
     private Recurso recurso;
     
-    public Coordenador(int id) {
+    public Coordenador(String id) {
         this.id = id;
         this.vivo = true;
         System.out.println("Coordenador " + id + " foi iniciado.");
     }
 
     public void pedirAcesso(Processo p){
-        if(processoLivre) {
+        if(recurso.getLivre() && fila.isEmpty()) {
             System.out.println("Coordenador " + id + " liberou o processo " + p + " de acessar o recurso.");
             recurso.acessarRecurso(p.getId());
         } else{
