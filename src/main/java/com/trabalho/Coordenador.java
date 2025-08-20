@@ -4,10 +4,11 @@ import java.util.Queue;
 
 public class Coordenador extends Thread {
 
-    private Queue<Integer> fila;
+    private Queue<Processo> fila;
     private int id;
     private boolean processoLivre;
     private boolean vivo;
+    private Recurso recurso;
     
     public Coordenador(int id) {
         this.id = id;
@@ -15,12 +16,21 @@ public class Coordenador extends Thread {
         System.out.println("Coordenador " + id + " foi iniciado.");
     }
 
-    public void pedirAcesso(){
+    public void pedirAcesso(Processo p){
         if(processoLivre) {
-            // TODO: Implementar lógica para pedir acesso
+            System.out.println("Coordenador " + id + " liberou o processo " + p + " de acessar o recurso.");
+            recurso.acessarRecurso(p.getId());
         } else{
-            // fila.add();
-            System.out.println("Coordenador " + id + " está aguardando acesso.");
+            fila.add(p);
+            System.out.println("Processo " + p + " adicionado à fila do coordenador " + id + ".");
+        }
+    }
+
+    public void coordenarAcesso(){
+        if(!fila.isEmpty()) {
+            Processo p = fila.poll();
+            System.out.println("Coordenador " + id + " liberou o processo " + p + " de acessar o recurso.");
+            recurso.acessarRecurso(p.getId());
         }
     }
 
