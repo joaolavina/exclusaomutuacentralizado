@@ -19,11 +19,6 @@ public class Processo {
         this.id = id;
     }
 
-    public String gerarId() {
-        String uniqueId = UUID.randomUUID().toString();
-        return uniqueId;
-    }
-
     public void tempoComsumo(int id) {
 
         try{
