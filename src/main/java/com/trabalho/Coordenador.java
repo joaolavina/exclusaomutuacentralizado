@@ -1,7 +1,7 @@
 package com.trabalho;
 
 import java.util.Queue;
-import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Coordenador extends Thread {
 
@@ -10,27 +10,24 @@ public class Coordenador extends Thread {
     private boolean vivo;
     private Recurso recurso;
     
-    public Coordenador(String id) {
+    public Coordenador(String id, Recurso recurso) {
         this.id = id;
         this.vivo = true;
+        this.recurso = recurso;
+        this.fila = new ConcurrentLinkedQueue<Processo>();
         System.out.println("Coordenador " + id + " foi iniciado.");
     }
 
     public void pedirAcesso(Processo p){
-        if(recurso.getLivre() && fila.isEmpty()) {
-            System.out.println("Coordenador " + id + " liberou o processo " + p + " de acessar o recurso.");
-            recurso.acessarRecurso(p.getId());
-        } else{
-            fila.add(p);
-            System.out.println("Processo " + p + " adicionado à fila do coordenador " + id + ".");
-        }
+        fila.add(p);
+        System.out.println("Processo " + p.getProcessId() + " adicionado à fila do coordenador " + id + ".");   
     }
 
     public void coordenarAcesso(){
         if(!fila.isEmpty()) {
             Processo p = fila.poll();
-            System.out.println("Coordenador " + id + " liberou o processo " + p + " de acessar o recurso.");
-            recurso.acessarRecurso(p.getId());
+            System.out.println("Coordenador " + id + " liberou o processo " + p.getProcessId() + " de acessar o recurso.");
+            recurso.acessarRecurso(p.getProcessId());
         }
     }
 
@@ -45,5 +42,9 @@ public class Coordenador extends Thread {
                 Thread.currentThread().interrupt();
             }
         }
+    }
+
+    public boolean isVivo() {
+        return vivo;
     }
 }

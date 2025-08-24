@@ -1,16 +1,19 @@
 package com.trabalho;
 
 import java.util.Random;
-public class Processo {
+
+public class Processo extends Thread {
 
     private String id;
-    private int tempoComsumo;
+    private Coordenador coordenador;
 
-    public Processo(String id) {
+    public Processo(String id, Coordenador coordenador) {
         this.id = id;
+        this.coordenador = coordenador;
+        System.out.println("Processo " + id + " criado.");
     }
 
-    public String getId() {
+    public String getProcessId() {
         return id;
     }
 
@@ -18,13 +21,18 @@ public class Processo {
         this.id = id;
     }
 
-    public void tempoComsumo(int id) {
-
-        try{
-            int tempoAcesso = new Random().nextInt(16) + 10;
-            Thread.sleep(tempoAcesso * 1000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+    @Override
+    public void run() {
+        Random random = new Random();
+        while (true) {
+            try {
+                int tempoAcesso = random.nextInt(16) + 10;
+                Thread.sleep(tempoAcesso * 1000);
+                coordenador.pedirAcesso(this);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
         }
     }
 }
