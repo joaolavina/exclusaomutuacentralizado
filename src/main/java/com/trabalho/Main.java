@@ -19,7 +19,6 @@ public class Main {
         executor.scheduleAtFixedRate(Main::criarNovoProcesso, 0, 40, TimeUnit.SECONDS);
 
         executor.scheduleAtFixedRate(() -> {
-            // Verifica se o coordenador atual ainda está vivo
             if (coordenador != null && coordenador.isVivo()) {
                 coordenador.coordenarAcesso();
             } else {
@@ -30,7 +29,7 @@ public class Main {
                 coordenador = new Coordenador(gerarId(), recurso);
                 coordenador.start();
             }
-        }, 0, 1, TimeUnit.SECONDS);
+        }, 0, 1, TimeUnit.MILLISECONDS);
     }
 
     private static Coordenador coordenador;
